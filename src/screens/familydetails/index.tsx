@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { DetailCard, FamilyForm, Modal, StatsCards, PaymentForm } from "@/src/components"; // Import the PaymentForm component
+import { DetailCard, FamilyForm, Modal, StatsCards, PaymentForm } from "@/src/components"; 
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { MdBorderColor, MdOutlinePayment } from "react-icons/md";
 import { OrderForm } from "@/src/components/forms/order";
@@ -19,7 +18,7 @@ export function FamilyDetailsPage() {
   const [visibleItems, setVisibleItems] = useState(9);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeForm, setActiveForm] = useState<"family" | "payment" | "order" | null>(null); 
-  const router = useRouter();
+  
 
   const filteredData = dummyData.filter((item) =>
     item.memberName.toLowerCase().includes(searchTerm.toLowerCase())

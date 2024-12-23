@@ -8,7 +8,7 @@ interface DetailCardProps {
   cityName: string;
 }
 
-export function DetailCard({ id, name, balance, cityName }: DetailCardProps) {
+export function DetailCard({  name, balance, cityName }: DetailCardProps) {
   return (
     <div className="w-full max-w-sm bg-white hover:bg-gradient-to-br from-orange-400 to-orange-600 hover:text-white rounded-lg shadow-sm overflow-hidden">
       <div className="p-6 space-y-4">
