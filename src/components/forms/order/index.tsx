@@ -73,15 +73,6 @@ export function OrderForm() {
                 key={field.id}
                 className="border border-gray-200 rounded-lg p-4 shadow-sm bg-gray-50 relative"
               >
-                <div className="absolute top-2 right-2">
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="text-red-600 hover:text-red-800 p-2"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
                 <div className="space-y-4">
                   <div>
                     <label
@@ -168,6 +159,16 @@ export function OrderForm() {
                       </div>
                     </div>
                   </div>
+                  <div className="mt-4 flex justify-between items-center">
+                    <button
+                      type="button"
+                      onClick={() => remove(index)}
+                      className="bg-orange-600 hover:bg-red-600 text-white p-2 flex items-center gap-2 rounded-md"
+                    >
+                      <FaTrash />
+                      <span>Delete</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -198,3 +199,4 @@ export function OrderForm() {
     </div>
   );
 }
+

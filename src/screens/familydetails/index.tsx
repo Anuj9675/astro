@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from "react";
-import { DetailCard, FamilyForm, Modal, StatsCards, PaymentForm } from "@/src/components"; 
+import { DetailCard, FamilyForm, Modal, StatsCards, PaymentForm, MemberForm } from "@/src/components"; 
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { MdBorderColor, MdOutlinePayment } from "react-icons/md";
 import { OrderForm } from "@/src/components/forms/order";
+import Link from "next/link";
 
 const dummyData = Array.from({ length: 20 }, (_, i) => ({
   id: i,
@@ -17,7 +18,7 @@ export function FamilyDetailsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [visibleItems, setVisibleItems] = useState(9);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeForm, setActiveForm] = useState<"family" | "payment" | "order" | null>(null); 
+  const [activeForm, setActiveForm] = useState<"Member" | "payment" | "order" | null>(null); 
   
 
   const filteredData = dummyData.filter((item) =>
@@ -32,14 +33,16 @@ export function FamilyDetailsPage() {
     setSearchTerm(e.target.value);
   };
 
-  const toggleModal = (formType: "family" | "payment" | "order" | null) => {
+  const toggleModal = (formType: "Member" | "payment" | "order" | null) => {
     setActiveForm(formType);
     setIsModalOpen((prev) => !prev);
   };
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
+      
       <div className="max-w-7xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Members List</h1>
         <div>
           <StatsCards />
         </div>
@@ -72,13 +75,14 @@ export function FamilyDetailsPage() {
               <MdOutlinePayment className="text-sm" />
               Payment
             </button>
+            <Link href='/member-creation'>
             <button
-              onClick={() => toggleModal("family")}
+              
               className="px-4 py-2 font-semibold bg-white text-gray-800 rounded-md shadow-sm hover:bg-white/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 flex items-center gap-2"
             >
               <FaPlus className="text-sm" />
               Create
-            </button>
+            </button></Link>
           </div>
         </div>
 
@@ -108,7 +112,6 @@ export function FamilyDetailsPage() {
 
       {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={() => toggleModal(null)}>
-        {activeForm === "family" && <FamilyForm />}
         {activeForm === "payment" && <PaymentForm />}
         {activeForm === "order" && <OrderForm />}
       </Modal>
