@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
 const orderSchema = yup.object().shape({
+  member: yup.string().required('Please select a family member'),
   items: yup
     .array()
     .of(
@@ -27,8 +28,8 @@ const orderSchema = yup.object().shape({
     .required('At least one item is required'),
 });
 
-
 type OrderFormValues = {
+  member: string;
   items: {
     itemName: string;
     quantity: number;
@@ -40,16 +41,17 @@ export function OrderForm() {
   const { control, handleSubmit, watch, reset } = useForm<OrderFormValues>({
     resolver: yupResolver(orderSchema),
     defaultValues: {
-      items: [{ itemName: '', quantity: 0, price: 0 }], 
+      member: '',
+      items: [{ itemName: '', quantity: 0, price: 0 }],
     },
   });
-  
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'items',
   });
 
+  const members = ['John Doe', 'Jane Smith', 'Emily Brown', 'Michael Johnson']; // Example member list
   const items = watch('items');
 
   const calculateGrandTotal = () =>
@@ -66,7 +68,37 @@ export function OrderForm() {
       <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">Order Form</h2>
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          
+          {/* Member Selection */}
+          <div>
+            <label htmlFor="member" className="block text-sm font-medium text-gray-700">
+              Select Family Member
+            </label>
+            <Controller
+              name="member"
+              control={control}
+              render={({ field, fieldState }) => (
+                <>
+                  <select
+                    {...field}
+                    id="member"
+                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">-- Select Member --</option>
+                    {members.map((member) => (
+                      <option key={member} value={member}>
+                        {member}
+                      </option>
+                    ))}
+                  </select>
+                  {fieldState.error && (
+                    <p className="text-sm text-red-500 mt-1">{fieldState.error.message}</p>
+                  )}
+                </>
+              )}
+            />
+          </div>
+
+          {/* Items Section */}
           <div className="space-y-6 max-h-96 overflow-auto pr-4">
             {fields.map((field, index) => (
               <div
@@ -199,4 +231,3 @@ export function OrderForm() {
     </div>
   );
 }
-

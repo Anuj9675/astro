@@ -1,381 +1,556 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useForm, Controller } from "react-hook-form";
+import {
+  daysList,
+  tithiList,
+  pakshaList,
+  ganaList,
+  lagnaList,
+  rashiList,
+  nakshatraList,
+  rashiDevList,
+} from "@/src/data";
+import { useEffect } from "react";
 
-export  function MemberForm() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    fatherName: '', 
-    birthDate: '',
-    birthTime: '',
-    birthPlace: '',
-    gender: 'Male',
-    phone: '',
-    email: '',
-    day: '',
-    thiti: '',
-    paksha: '',
-    gana: '',
-    loagna: '',
-    rasi: '',
-    rakshatra: '',
-    lagnaChart: ['', ''],
-    chandraChart: ['', '']
-  })
+type FormData = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  fatherName: string;
+  birthDate: string;
+  birthTime: string;
+  birthPlace: string;
+  gender: string;
+  phone: string;
+  email: string;
+  address: string;
+  day: string;
+  thiti: string;
+  paksha: string;
+  gana: string;
+  lagna: string;
+  rasi: string;
+  nakshatra: string;
+  rashiDev: string;
+  lagnaChart: string[];
+  chandraChart: string[];
+};
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
+export function MemberForm() {
+  const { control, handleSubmit, reset, setValue, watch } = useForm<FormData>({
+    defaultValues: {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      fatherName: "",
+      birthDate: "",
+      birthTime: "",
+      birthPlace: "",
+      gender: "Male",
+      phone: "",
+      email: "",
+      address: "",
+      day: "",
+      thiti: "",
+      paksha: "",
+      gana: "",
+      lagna: "",
+      rasi: "",
+      rashiDev: "",
+      nakshatra: "",
+      lagnaChart: [""],
+      chandraChart: [""],
+    },
+  });
 
-  const handleChartChange = (chart: 'lagnaChart' | 'chandraChart', index: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [chart]: prev[chart].map((item, i) => i === index ? value : item)
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
-  }
+  const onSubmit = (data: FormData) => {
+    console.log("Form submitted:", data);
+  };
 
   const handleReset = () => {
-    setFormData({
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      fatherName: '',
-      birthDate: '',
-      birthTime: '',
-      birthPlace: '',
-      gender: 'Male',
-      phone: '',
-      email: '',
-      day: '',
-      thiti: '',
-      paksha: '',
-      gana: '',
-      loagna: '',
-      rasi: '',
-      rakshatra: '',
-      lagnaChart: ['', ''],
-      chandraChart: ['', '']
-    })
-  }
+    reset();
+  };
+
+  const rashi = watch("rasi");
+
+  useEffect(() => {
+    if (rashi) {
+      // Set the corresponding rashiDev based on the selected rashi
+      const matchedRashiDev = rashiDevList.find((dev) => dev.includes(rashi));
+      if (matchedRashiDev) {
+        setValue("rashiDev", matchedRashiDev);
+      }
+    }
+  }, [rashi, setValue]);
 
   return (
     <div className="max-w-7xl mx-auto p-4">
-
       <h2 className="text-xl font-semibold mb-6">Member creation form</h2>
-
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {/* Demographic Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Demographic</h3>
-          
+
+          {/* First Name */}
           <div>
             <label className="block text-sm mb-1">First Name</label>
-            <input
-              type="text"
+            <Controller
               name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Middle Name */}
           <div>
             <label className="block text-sm mb-1">Middle Name</label>
-            <input
-              type="text"
+            <Controller
               name="middleName"
-              value={formData.middleName}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Last Name */}
           <div>
             <label className="block text-sm mb-1">Last Name</label>
-            <input
-              type="text"
+            <Controller
               name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Father's Name */}
           <div>
             <label className="block text-sm mb-1">Father's Name</label>
-            <input
-              type="text"
+            <Controller
               name="fatherName"
-              value={formData.fatherName}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Birth Date */}
           <div>
             <label className="block text-sm mb-1">Birth Date</label>
-            <input
-              type="date"
+            <Controller
               name="birthDate"
-              value={formData.birthDate}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="date"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Birth Time */}
           <div>
             <label className="block text-sm mb-1">Birth Time</label>
-            <input
-              type="time"
+            <Controller
               name="birthTime"
-              value={formData.birthTime}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="time"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Birth Place */}
           <div>
             <label className="block text-sm mb-1">Birth Place</label>
-            <input
-              type="text"
+            <Controller
               name="birthPlace"
-              value={formData.birthPlace}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Gender */}
           <div>
             <label className="block text-sm mb-1">Gender</label>
-            <select
+            <Controller
               name="gender"
-              value={formData.gender}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              )}
+            />
           </div>
-
-          
         </div>
 
         {/* Contact Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Contact</h3>
-          
+
+          {/* Phone */}
           <div>
             <label className="block text-sm mb-1">Phone</label>
-            <input
-              type="tel"
+            <Controller
               name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="tel"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-sm mb-1">Email</label>
-            <input
-              type="email"
+            <Controller
               name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="email"
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                />
+              )}
             />
           </div>
 
-          <div>
-            <h4 className="text-lg font-medium mb-2">Notes</h4>
-            <button
-              type="button"
-              className="px-4 py-2 bg-orange-50 text-orange-600 rounded-md hover:bg-orange-100"
-            >
-              Add
-            </button>
+          {/* Address */}
+          <div className="flex-1">
+            <label className="block text-sm mb-1">Address</label>
+            <Controller
+              name="address"
+              control={control}
+              render={({ field }) => (
+                <textarea
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  placeholder="Enter your address"
+                />
+              )}
+            />
           </div>
         </div>
 
         {/* Extra Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Extra</h3>
-          
+
+          {/* Day */}
           <div>
             <label className="block text-sm mb-1">Day</label>
-            <input
-              type="text"
+            <Controller
               name="day"
-              value={formData.day}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="">Select Day</option>
+                  {daysList.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              )}
             />
           </div>
 
+          {/* Thiti */}
           <div>
             <label className="block text-sm mb-1">Thiti</label>
-            <input
-              type="text"
+            <Controller
               name="thiti"
-              value={formData.thiti}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="">Select Thiti</option>
+                  {tithiList.map((thiti) => (
+                    <option key={thiti} value={thiti}>
+                      {thiti}
+                    </option>
+                  ))}
+                </select>
+              )}
             />
           </div>
 
+          {/* Paksha */}
           <div>
             <label className="block text-sm mb-1">Paksha</label>
-            <input
-              type="text"
+            <Controller
               name="paksha"
-              value={formData.paksha}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="">Select Paksha</option>
+                  {pakshaList.map((paksha) => (
+                    <option key={paksha} value={paksha}>
+                      {paksha}
+                    </option>
+                  ))}
+                </select>
+              )}
             />
           </div>
 
+          {/* Gana */}
           <div>
             <label className="block text-sm mb-1">Gana</label>
-            <input
-              type="text"
+            <Controller
               name="gana"
-              value={formData.gana}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="">Select Gana</option>
+                  {ganaList.map((gana) => (
+                    <option key={gana} value={gana}>
+                      {gana}
+                    </option>
+                  ))}
+                </select>
+              )}
             />
           </div>
 
+          {/* Lagna */}
           <div>
-            <label className="block text-sm mb-1">Loagna</label>
-            <input
-              type="text"
-              name="loagna"
-              value={formData.loagna}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+            <label className="block text-sm mb-1">Lagna</label>
+            <Controller
+              name="lagna"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="">Select Lagna</option>
+                  {lagnaList.map((lagna) => (
+                    <option key={lagna} value={lagna}>
+                      {lagna}
+                    </option>
+                  ))}
+                </select>
+              )}
             />
           </div>
 
-          <div>
-            <label className="block text-sm mb-1">Rasi</label>
-            <input
-              type="text"
-              name="rasi"
-              value={formData.rasi}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-            />
+          <div className="flex space-x-4">
+            <div className="flex-1">
+              <label className="block text-sm mb-1">Rashi</label>
+              <Controller
+                name="rasi"
+                control={control}
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  >
+                    <option value="">Select Rashi</option>
+                    {rashiList.map((rashi) => (
+                      <option key={rashi} value={rashi}>
+                        {rashi}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label className="block text-sm mb-1">Rashi Dev</label>
+              <Controller
+                name="rashiDev"
+                control={control}
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  >
+                    <option value="">Select Rashi Dev</option>
+                    {rashiDevList.map((rashiDev) => (
+                      <option key={rashiDev} value={rashiDev}>
+                        {rashiDev}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              />
+            </div>
           </div>
 
+          {/* Nakshatra */}
           <div>
-            <label className="block text-sm mb-1">Rakshatra</label>
-            <input
-              type="text"
-              name="rakshatra"
-              value={formData.rakshatra}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+            <label className="block text-sm mb-1">Nakshatra</label>
+            <Controller
+              name="nakshatra"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                >
+                  <option value="">Select Nakshatra</option>
+                  {nakshatraList.map((nakshatra) => (
+                    <option key={nakshatra} value={nakshatra}>
+                      {nakshatra}
+                    </option>
+                  ))}
+                </select>
+              )}
             />
           </div>
         </div>
 
-        {/* Charts Section */}
-        <div className="space-y-8">
-          {/* Lagna Chart */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Lagna Chart</h3>
-            
-            {[0, 1].map((index) => (
-              <div key={`lagna-${index}`} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="block text-sm">House {index + 1}</label>
-                  <button
-                    type="button"
-                    className="text-red-500 text-sm hover:underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  value={formData.lagnaChart[index]}
-                  onChange={(e) => handleChartChange('lagnaChart', index, e.target.value)}
-                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+        <div className="flex space-x-4">
+          <div>
+            <h3 className="text-lg font-medium">Lagan Chart</h3>
+            <div className="mt-4 space-y-4">
+              <div>
+                <label className="block text-sm mb-1">House 1</label>
+                <Controller
+                  name="lagnaChart"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      className=" px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  )}
                 />
               </div>
-            ))}
-            
-            <button
-              type="button"
-              className="px-4 py-2 bg-orange-50 text-orange-600 rounded-md hover:bg-orange-100"
-            >
-              Add
-            </button>
+
+              <div>
+                <label className="block text-sm mb-1">House 2</label>
+                <Controller
+                  name="lagnaChart"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      className=" px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  )}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Chandra Chart */}
-          <div className="space-y-4">
+          <div>
             <h3 className="text-lg font-medium">Chandra Chart</h3>
-            
-            {[0, 1].map((index) => (
-              <div key={`chandra-${index}`} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="block text-sm">House {index + 1}</label>
-                  <button
-                    type="button"
-                    className="text-red-500 text-sm hover:underline"
-                  >
-                    Remove
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  value={formData.chandraChart[index]}
-                  onChange={(e) => handleChartChange('chandraChart', index, e.target.value)}
-                  className="w-full px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+            <div className="mt-4 space-y-4">
+              <div>
+                <label className="block text-sm mb-1">House 1</label>
+                <Controller
+                  name="lagnaChart"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      className=" px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  )}
                 />
               </div>
-            ))}
-            
-            <button
-              type="button"
-              className="px-4 py-2 bg-orange-50 text-orange-600 rounded-md hover:bg-orange-100"
-            >
-              Add
-            </button>
+
+              <div>
+                <label className="block text-sm mb-1">House 2</label>
+                <Controller
+                  name="lagnaChart"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      className="px-3 py-2 border border-orange-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  )}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Form Actions */}
-        <div className="col-span-full flex gap-4 mt-8">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="px-6 py-2 bg-orange-50 text-orange-600 rounded-md hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-          >
-            Reset
-          </button>
+        {/* Actions */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="px-4 py-2 bg-gray-300 text-black rounded-md"
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </form>
     </div>
-  )
+  );
 }
-
